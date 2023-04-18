@@ -5,6 +5,8 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
@@ -50,17 +52,31 @@ class Handler extends ExceptionHandler
 
         $this->renderable(function (NotFoundHttpException $e, Request $request) {
             if ($request->is('api/*')) {
+                Log::notice('Not Found 404: '. $e->getMessage());
                 return response()->json([
-                    'message' => 'Record not found.',
+                    'title' => 'Not Found',
+                    'message' => 'Record not found',
                     'code' => 404
                 ], 404);
             }
         });
 
+        $this->renderable(function (ValidationException $e, Request $request) {
+            if ($request->is('api/*')) {
+                Log::warning('Bad Request 400: '. $e->validator->errors());
+                return response()->json([
+                    'title' => 'Bad Request',
+                    'message' => $e->validator->errors(),
+                    'code' => 400
+                ], 400);
+            }
+        });
+
         $this->renderable(function (Exception $e, Request $request) {
             if ($request->is('api/*')) {
+                Log::error('Internal Server Error 500: '. $e->getMessage());
                 return response()->json([
-                    'message' => 'Internal Server Error',
+                    'title' => 'Internal Server Error',
                     'code' => 500
                 ], 500);
             }

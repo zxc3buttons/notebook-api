@@ -3,13 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Http\Services\NotebookService;
+use App\Http\Services\NotebookServiceImpl;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class NotebookController extends Controller
 {
     /**
-     * @var NotebookService
+     * @var NotebookServiceImpl
      */
     private NotebookService $notebookService;
 
@@ -23,7 +27,9 @@ class NotebookController extends Controller
      */
     public function index(): JsonResponse
     {
-        return response()->json($this->notebookService->getAll());
+        $notebooks = $this->notebookService->getAll();
+        Log::debug('GET request for getting all notebooks: ' . $notebooks);
+        return response()->json($notebooks);
     }
 
     /**
@@ -32,16 +38,31 @@ class NotebookController extends Controller
      */
     public function show(string $id): JsonResponse
     {
-        return response()->json($this->notebookService->getOne($id));
+        $notebook = $this->notebookService->getOne($id);
+        Log::debug('GET request for getting notebook with id ' . $id . ': ' . $notebook);
+        return response()->json($notebook);
     }
 
     /**
      * @param Request $request
      * @return JsonResponse
+     * @throws ValidationException
      */
     public function store(Request $request): JsonResponse
     {
-        return response()->json($this->notebookService->create($request->all()), 201);
+        $validator = Validator::make($request->all(), [
+            'full_name' => 'required',
+            'phone' => 'required',
+            'email' => 'required|email',
+        ]);
+
+        if ($validator->fails()) {
+            throw new ValidationException($validator);
+        }
+
+        $notebook = $this->notebookService->create($request->all());
+        Log::debug('POST request for creating notebook. Created entity: ' . $notebook);
+        return response()->json($notebook, 201);
     }
 
     /**
@@ -50,7 +71,9 @@ class NotebookController extends Controller
      */
     public function update(Request $request): JsonResponse
     {
-        return response()->json($this->notebookService->update($request));
+        $notebook = $this->notebookService->update($request);
+        Log::debug('POST request for updating notebook. Updated entity: ' . $notebook);
+        return response()->json($notebook);
     }
 
     /**
@@ -60,6 +83,7 @@ class NotebookController extends Controller
     public function delete($id): JsonResponse
     {
         $this->notebookService->delete($id);
+        Log::debug('DELETE request for deleting notebook.');
         return response()->json(['Notebook deleted successfully'], 204);
     }
 }
