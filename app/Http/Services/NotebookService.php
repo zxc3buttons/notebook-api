@@ -9,9 +9,9 @@ use Illuminate\Http\Request;
 interface NotebookService
 {
     /**
-     * @return Collection
+     * @return mixed
      */
-    public function getAll(): Collection;
+    public function getAll(): mixed;
 
     /**
      * @param int $id

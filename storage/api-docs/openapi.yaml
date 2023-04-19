@@ -1,0 +1,17 @@
+components:
+  schemas:
+    Notebook:
+      type: object
+      properties:
+        full_name:
+          type: string
+        company:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+        birth_date:
+          type: date
+        image_link:
+          type: string

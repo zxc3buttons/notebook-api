@@ -10,6 +10,20 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
+/**
+ * @OA\Info(
+ *      version="1.0.0",
+ *      title="My API",
+ *      description="API description",
+ *      @OA\Contact(
+ *          email="support@example.com"
+ *      ),
+ *      @OA\License(
+ *          name="Apache 2.0",
+ *          url="http://www.apache.org/licenses/LICENSE-2.0.html"
+ *      )
+ * )
+ */
 class NotebookController extends Controller
 {
     /**
@@ -23,7 +37,22 @@ class NotebookController extends Controller
     }
 
     /**
-     * @return JsonResponse
+     * Get a list of all users
+     *
+     * @OA\Get(
+     *     path="/api/notebooks",
+     *     summary="Get a list of all notebooks",
+     *     operationId="getAllNotebooks",
+     *     tags={"Notebooks"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             type="array",
+     *             @OA\Items(ref="./openapi.yaml")
+     *         )
+     *     )
+     * )
      */
     public function index(): JsonResponse
     {
@@ -33,8 +62,30 @@ class NotebookController extends Controller
     }
 
     /**
-     * @param string $id
-     * @return JsonResponse
+     * @OA\Get(
+     *     path="/api/notebooks/{id}",
+     *     summary="Get a single notebook",
+     *     tags={"Notebooks"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID of the notebook to retrieve",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer",
+     *             format="int64"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Returns the notebook",
+     *         @OA\JsonContent(ref="./openapi.yaml")
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Notebook not found"
+     *     ),
+     *)
      */
     public function show(string $id): JsonResponse
     {

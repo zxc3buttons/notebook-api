@@ -8,12 +8,9 @@ use Illuminate\Http\Request;
 
 class NotebookServiceImpl implements NotebookService
 {
-    /**
-     * @return Collection
-     */
-    public function getAll(): Collection
+    public function getAll(): mixed
     {
-        return Notebook::all();
+        return Notebook::paginate();
     }
 
     /**

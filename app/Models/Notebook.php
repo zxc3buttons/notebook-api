@@ -13,6 +13,9 @@ class Notebook extends Model
 
     protected $primaryKey = 'id';
 
+    protected $perPage = 10;
+
+    protected string $pageName = 'page';
     protected $fillable = [
         'full_name',
         'company',

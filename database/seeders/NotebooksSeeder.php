@@ -15,7 +15,7 @@ class NotebooksSeeder extends Seeder
     {
         $faker = Faker::create();
 
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 1000; $i++) {
             DB::table('notebooks')->insert([
                 'full_name' => $faker->name(),
                 'company' => $faker->company(),
