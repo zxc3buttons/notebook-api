@@ -36,6 +36,78 @@
                         }
                     }
                 }
+            },
+            "post": {
+                "tags": [
+                    "Notebooks"
+                ],
+                "summary": "Create a new notebook",
+                "description": "Store a new notebook in the database",
+                "operationId": "9e28f960dc353b22d8ee1e3e0c0481ca",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "full_name",
+                                    "phone",
+                                    "email"
+                                ],
+                                "properties": {
+                                    "full_name": {
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "company": {
+                                        "type": "string",
+                                        "example": "Google"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "+1234567890"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "john.doe@example.com"
+                                    },
+                                    "birth_date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "1990-01-01"
+                                    },
+                                    "image_link": {
+                                        "type": "string",
+                                        "example": "https://example.com/image.jpg"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Notebook created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "./openapi.yaml"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "./openapi.yaml"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "/api/notebooks/{id}": {
@@ -70,6 +142,111 @@
                     },
                     "404": {
                         "description": "Notebook not found"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Notebooks"
+                ],
+                "summary": "Update an existing notebook",
+                "description": "Update an existing notebook",
+                "operationId": "updateNotebook",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of notebook",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Request body for updating notebook",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "id": {
+                                        "type": "integer"
+                                    },
+                                    "full_name": {
+                                        "type": "string"
+                                    },
+                                    "company": {
+                                        "type": "string"
+                                    },
+                                    "phone": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "birth_date": {
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "image_link": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Notebook updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "./openapi.yaml"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Notebook not found"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Notebooks"
+                ],
+                "summary": "Delete the notebook by given id",
+                "description": "Deletes the notebook by given id and returns a success message.",
+                "operationId": "deleteNotebookById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the notebook to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Notebook deleted successfully"
+                    },
+                    "404": {
+                        "description": "Notebook not found"
+                    },
+                    "500": {
+                        "description": "Server error"
                     }
                 }
             }
