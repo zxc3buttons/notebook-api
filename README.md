@@ -19,11 +19,11 @@ API доступен по адресу http://localhost:8000/api/notebook
 
 Доступные методы:
 
-GET /api/notebook - получить список всех заметок
-GET /api/notebook/{id} - получить заметку по ID
-POST /api/notebook - создать новую заметку
-POST /api/notebook/{id} - обновить существующую заметку по ID
-DELETE /api/notebook/{id} - удалить заметку по ID
+- GET /api/notebook - получить список всех заметок
+- GET /api/notebook/{id} - получить заметку по ID
+- POST /api/notebook - создать новую заметку
+- POST /api/notebook/{id} - обновить существующую заметку по ID
+- DELETE /api/notebook/{id} - удалить заметку по ID
 
 ## Для пагинации списка заметок используйте параметры page и limit. Например: /api/notes?page=1&limit=10.
 
